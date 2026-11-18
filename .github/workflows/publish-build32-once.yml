@@ -1,0 +1,67 @@
+name: Publish Deskonect 0.1.2 Preview Build 32
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-build32-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish-windows-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_SHA256: 0158840ea5eeffe7d96b6628da10d5ce20b4eed363a1db2120d1094948998f05
+      EXPECTED_SIZE: '97938731'
+      FILENAME: Deskonect-Setup-0.1.2-preview.32-x64.exe
+      TAG: v0.1.2-preview.32
+    steps:
+      - name: Retrieve successful private CI installer artifact
+        env:
+          ONE_TIME_DOWNLOAD_URL: 'https://sdmntprjapaneast.oaiusercontent.com/files/00000000-b040-8209-beb0-2a176905c59e/raw?se=2026-11-18T15%3A19%3A03Z&sp=r&sv=2026-06-06&sr=b&scid=ac1b1251-2659-5627-a93b-d85076f4db34&skoid=fe2e0858-51c5-47e9-acb7-46ebb9a0f396&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-18T04%3A22%3A19Z&ske=2026-11-19T04%3A22%3A19Z&sks=b&skv=2026-06-06&sig=jcWNgE3mN652osbOULWBw7n1Roh8NT41sVDhHoFJlE0%3D'
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 180 \
+            --silent --show-error "$ONE_TIME_DOWNLOAD_URL" --output /tmp/deskonect-build32.zip
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          path = Path('/tmp/deskonect-build32.zip')
+          target = Path('/tmp') / os.environ['FILENAME']
+          with ZipFile(path) as archive:
+              assert set(archive.namelist()) == {os.environ['FILENAME'], 'SHA256SUMS.txt'}
+              sums = archive.read('SHA256SUMS.txt').decode('utf-8-sig').strip()
+              with archive.open(os.environ['FILENAME']) as source, target.open('wb') as output:
+                  digest = hashlib.sha256()
+                  size = 0
+                  while data := source.read(1024 * 1024):
+                      size += len(data)
+                      digest.update(data)
+                      output.write(data)
+          assert size == int(os.environ['EXPECTED_SIZE']), 'Setup size mismatch'
+          assert digest.hexdigest() == os.environ['EXPECTED_SHA256'], 'Setup digest mismatch'
+          assert sums.lower() == f"{digest.hexdigest()}  {os.environ['FILENAME']}".lower(), 'CI checksum mismatch'
+          print(f'Verified {target.name}, SHA256: {digest.hexdigest()}')
+          PY
+
+      - name: Publish verified installer to public updater feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release already exists. Refusing to overwrite." >&2
+            exit 1
+          fi
+          gh release create "$TAG" "/tmp/$FILENAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Deskonect Windows Preview Build 32" \
+            --notes "Windows 0.1.2 Preview Build 32. Includes Windows Google login G-VERIFY fixes. Source: private Deskonect CI run 44329464539 (commit af1bef1). Windows installer passed CI packaging, install, launch and uninstall checks; real-account login on the affected Windows machine remains unverified." \
+            --latest
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft,isPrerelease,assets
