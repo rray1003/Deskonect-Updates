@@ -1,0 +1,66 @@
+name: Publish Deskonect 0.1.2 Preview Build 35
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-build35-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish-windows-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_SHA256: 25a40af3483ae370412454ad300b5b267819c8ca2b890ede9690896a4a9d49f4
+      EXPECTED_SIZE: '97935209'
+      FILENAME: Deskonect-Setup-0.1.2-preview.35-x64.exe
+      TAG: v0.1.2-preview.35
+    steps:
+      - name: Fetch and validate successful Windows Build 35 installer
+        env:
+          ONE_TIME_DOWNLOAD_URL: 'https://sdmntprwestus.oaiusercontent.com/files/00000000-45dc-8230-97b9-aa7fd1bfb1b1/raw?se=2026-11-18T15%3A38%3A29Z&sp=r&sv=2026-06-06&sr=b&scid=3483f723-cc48-551b-8767-47d789be4b22&skoid=fe2e0858-51c5-47e9-acb7-46ebb9a0f396&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-18T04%3A16%3A20Z&ske=2026-11-19T04%3A16%3A20Z&sks=b&skv=2026-06-06&sig=z1Vs4xPAT00ZhMFqJABs19hdIWW3oIK1tVTUwNN5v98%3D'
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 180 \
+            --silent --show-error "$ONE_TIME_DOWNLOAD_URL" --output /tmp/deskonect-build35.zip
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          target = Path('/tmp') / os.environ['FILENAME']
+          with ZipFile('/tmp/deskonect-build35.zip') as archive:
+              assert set(archive.namelist()) == {os.environ['FILENAME'], 'SHA256SUMS.txt'}
+              sums = archive.read('SHA256SUMS.txt').decode('utf-8-sig').strip()
+              with archive.open(os.environ['FILENAME']) as source, target.open('wb') as output:
+                  digest = hashlib.sha256()
+                  size = 0
+                  while data := source.read(1024 * 1024):
+                      size += len(data)
+                      digest.update(data)
+                      output.write(data)
+          assert size == int(os.environ['EXPECTED_SIZE']), 'Installer size mismatch'
+          assert digest.hexdigest() == os.environ['EXPECTED_SHA256'], 'Installer hash mismatch'
+          assert sums.lower() == f"{digest.hexdigest()}  {os.environ['FILENAME']}".lower(), 'CI manifest mismatch'
+          print(f'Verified {target.name}, SHA256 {digest.hexdigest()}')
+          PY
+
+      - name: Publish the Windows crash-recovery preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Refusing to overwrite existing release" >&2
+            exit 1
+          fi
+          gh release create "$TAG" "/tmp/$FILENAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Deskonect Windows Preview Build 35" \
+            --notes "Windows Preview Build 35. Adds local crash reporting and --safe-mode startup, fixes shutdown/account sync race and malformed history startup handling. Windows Setup CI, install/launch/uninstall and Python tests passed. Specific crash on the user's Windows computer is not yet reproduced or confirmed fixed; share the local crash.log or Windows Reliability Monitor details if it persists. Source commit c50e601, CI run 44335602386." \
+            --latest
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft,isPrerelease,assets
