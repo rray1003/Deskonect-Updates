@@ -4,6 +4,28 @@
 
 ## 0.2.x 系列
 
+### 0.2.0-alpha.87 — 2026-11-19
+
+**狀態：已發布（Windows）；沿用本輪 Windows 優先發布授權，Android 保持原版。**
+
+**新增**
+- App 內使用 Google 憑證 HTTPS 回應時間建立登入驗證基準，不修改 Windows 時鐘。
+
+**優化**
+- 登入有效期及續期改用單調時鐘；Google 金鑰輪替時重新抓取並重驗一次。
+
+**除錯**
+- 修正本機時間不準導致新 Google／Firebase 憑證被拒絕；仍以 Google 時間嚴格檢查有效期並驗證簽章、issuer、audience。
+
+**驗證與限制**
+- 175 Python tests、Ruff、四個執行檔 smoke 通過；模擬本機 ±30 天，新 token 通過、過期及竄改 token 仍拒絕。真實 Firebase 續期於程序內模擬本機 ±1 天均通過。
+- 上傳三個資產 SHA-256 相符，公開更新器可由 Build 86 讀到 87。新 Build 在第三台錯時鐘環境下的實機驗收仍待確認；TLS 無法建立可信連線時不會繞過安全檢查。
+- 來源：`24c97d981b88fc48f15ad37ee748cffea7a5166e`。
+
+[Windows 登入時間校正修正版](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.87)
+
+
+
 ### 0.2.0-alpha.86 — 2026-11-19
 
 **狀態：已發布（依本次使用者指示僅 Windows）；Android 保留 Build 84。**
