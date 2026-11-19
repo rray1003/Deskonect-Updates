@@ -4,6 +4,28 @@
 
 ## 0.2.x 系列
 
+### 0.2.0-alpha.90 — 2026-11-20
+
+**狀態：Windows／Android 已共同發布。正式 Firestore 配額仍待恢復。**
+
+**新增**
+- 加入 429 帳號保留、共用冷卻及大量舊會話查詢的回歸測試。
+
+**優化**
+- Windows 僅查詢目標攝影機未過期邀請；兩端取消舊會話全目錄掃描，減少可見清單的自動刷新。
+- Firestore 429 共用五分鐘退避，Auth／RTDB SSE 保持獨立。
+
+**除錯**
+- 手機裝置登錄配額錯誤不再當成 Google 登入失敗；保存登入並清楚提示暫時無法讀取裝置，稍後重試。
+- Windows 配額錯誤保留既有帳號與清單，避免誤導使用者重新登入或清除資料。
+
+**驗證與限制**
+- Python、Ruff、Flutter analyze/test 與 Firestore 模擬器回歸已執行，詳見 `docs/ALPHA90_QUOTA_REPAIR.md`。
+- 本機發布器 205 Python／41 Flutter 測試通過，四個 Windows 封裝程式 smoke、Setup、既有 v2 簽章 release APK 與 GitHub 資產雜湊核對通過；模擬器 89→90 覆蓋安裝成功。正式後端 429 的 Flutter 帳號恢復測試通過，但不是實體手機驗收。
+- 沒有升級 Blaze 或啟用計費；本版無法補回已耗盡的服務端額度，正式同步恢復及 24 小時用量仍待驗證。
+
+[Windows／Android Build 90](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.90)
+
 ### 0.2.0-alpha.89 — 2026-11-20
 
 **狀態：已發布 Windows x64 + Android，共同 Build 89。**
