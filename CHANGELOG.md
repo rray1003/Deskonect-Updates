@@ -4,6 +4,31 @@
 
 ## 0.2.x 系列
 
+### 0.2.0-alpha.89 — 2026-11-20
+
+**狀態：已發布 Windows x64 + Android，共同 Build 89。**
+
+**新增**
+- 免費 Spark RTDB 實例及安全規則真正部署；兩端內建公開 SSE 網址。加入 RTDB 規則／SSE 整合測試、Android 影格停滯偵測及分享停止通知。
+
+**優化**
+- 沿用簽章 Firestore 邀請、SSE 即時提示與安全輪詢回退；背景閒置釋放鏡頭，斷線漸進重試。
+- Windows 攝影機等待邀請回覆涵蓋背景待命排程，短暫 ICE 中斷先給既有連線恢復機會。
+
+**除錯**
+- 修正 Android WebRTC applyConstraints 不會改變影像尺寸的問題；改為重建本機擷取及替換 RTP track，保留 SDP/ICE。
+- 修正 SSE 無資料逾時、停止後擷取競態、Windows 舊鍵鼠事件重播及明確授權拒絕後仍重試。
+- 修復交接程式 Ruff 診斷與生命週期測試。
+
+**驗證與限制**
+- Python 203、發布工具 17、Flutter 40 項測試；Ruff／Flutter analyze；RTDB 19、Firestore 33、Auth/同步 33 項模擬器檢查通過。既有 v2 憑證核對與 Kotlin/Gradle debug APK 編譯通過。
+- 正式 RTDB 規則已回讀，匿名存取拒絕；管理者 SSE 寫入收送成功。未啟用計費，無付費 TURN。
+- Windows 使用者 SSE 喚醒兩次各 0.157 秒，主動切斷 socket 後 2.156 秒自動恢復；實際 Dart SSE 喚醒 134～135 ms。這些是通道延遲，不是鏡頭首幀或跨裝置串流重連時間。
+- 兩種 Windows Setup、四個封裝程式 smoke、既有 v2 簽章 release APK、GitHub 資產雜湊核對通過；Android 16 模擬器 Build 82→89 覆蓋安裝及啟動成功。另有 1 項 opt-in 正式 Dart SSE 測試通過。
+- 無實體手機／第二台 Windows；Doze、耗電、跨網、鏡頭畫質切換與各方向端到端重連尚未實機驗收。完整步驟見 `docs/REALTIME_RELEASE_VALIDATION_2026-11-20.md`。
+
+[Windows／Android 共同 Release](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.89)
+
 ### 0.2.0-alpha.87 — 2026-11-19
 
 **狀態：已發布（Windows）；沿用本輪 Windows 優先發布授權，Android 保持原版。**
@@ -23,8 +48,6 @@
 - 來源：`24c97d981b88fc48f15ad37ee748cffea7a5166e`。
 
 [Windows 登入時間校正修正版](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.87)
-
-
 
 ### 0.2.0-alpha.86 — 2026-11-19
 
