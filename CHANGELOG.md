@@ -4,6 +4,28 @@
 
 ## 0.2.x 系列
 
+### 0.2.0-alpha.85 — 2026-11-19
+
+**狀態：已發布（本次使用者明確同意僅 Windows）；Android 保留 Build 84。**
+
+**新增**
+- Google／Firebase 公開驗證憑證下載的系統 HTTPS 備援與有限重試。
+
+**優化**
+- 尊重伺服器有效期快取公開憑證，不使用過期快取。
+
+**除錯**
+- 修正無效簽章被誤報為 G-NETWORK；回傳網頁等待 Windows Google 身分驗證結果，失敗不回報成功。
+
+**驗證與限制**
+- 本機 167 Python tests、Ruff、GUI／CLI／Agent／更新助手 smoke 通過；三個上傳資產 SHA-256 相符，公開更新器從 Build 84 可讀到 Build 85。
+- 第三台 Windows 真實 Google 登入、完整更新安裝與受管理網路尚待驗收；斷網不會繞過驗證。Windows Setup 尚無 Authenticode 簽章。
+- 原始碼：`ca472bc9c8f72eee8106c80615a6d659b63cbae0`。
+
+[Windows 修正版](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.85)
+
+
+
 ### 0.2.0-alpha.82 — 2026-11-19
 
 **狀態：已發布（Alpha）；功能實機驗收未全數完成。**
