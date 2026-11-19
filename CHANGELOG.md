@@ -4,6 +4,29 @@
 
 ## 0.2.x 系列
 
+### 0.2.0-alpha.91 — 2026-11-20
+
+**狀態：Windows／Android 已共同發布；正式 RTDB 帳戶與雙向協商驗證通過。兩端都需要更新。**
+
+**新增**
+- Windows／Android 使用免費 Spark RTDB v2 裝置目錄與攝影機協商，保留 Google 身分驗證及既有裝置簽章。
+- 加入正式 Python／Dart 雙向授權協商驗證器與 50 項 RTDB v2 規則測試。
+
+**優化**
+- 有效邀請索引查詢最多 8 筆，過期清理每五分鐘最多 4 筆；silent 寫入、回應大小限制、共用退避。
+
+**除錯**
+- 修正 Firestore HTTP 429 導致手機登入失敗、PC 裝置清單空白；新版資料流程不再呼叫 Firestore，故障時保留已驗證登入。
+- 重導向必須保留完整憑證與查詢，裝置 ID／既有金鑰與 Android v2 簽章保持不變。
+
+**驗證與限制**
+- Python 211、Flutter 42、RTDB 規則 50 項通過；Ruff、Flutter analyze、Windows 四個 EXE smoke、兩種 Setup、Android release 編譯與資產雜湊核對通過。
+- 正式 Google Auth／RTDB 的 Python／Dart 註冊／列出裝置、雙向簽章邀請／回覆／刪除成功，Firestore 資料呼叫 0。未啟用計費。
+- 本機 Windows 90→91 覆蓋安裝成功，原登入自動恢復，畫面顯示同帳號裝置及背景接聽運作中；Android 16 模擬器 90→91 覆蓋安裝及冷啟動成功。實體手機選帳戶登入、跨網媒體、Doze、長時間耗電仍未實機驗收。
+- 舊 Firestore 歷史紀錄保留，不自動轉成有效授權。兩端更新並登入後，以原本身分在新目錄重新登記；不需清除 App 資料。
+
+[Windows／Android Build 91](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.91)
+
 ### 0.2.0-alpha.90 — 2026-11-20
 
 **狀態：Windows／Android 已共同發布。正式 Firestore 配額仍待恢復。**
