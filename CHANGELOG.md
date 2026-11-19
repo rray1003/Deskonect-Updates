@@ -4,6 +4,29 @@
 
 ## 0.2.x 系列
 
+### 0.2.0-alpha.86 — 2026-11-19
+
+**狀態：已發布（依本次使用者指示僅 Windows）；Android 保留 Build 84。**
+
+**新增**
+- 無。
+
+**優化**
+- Windows 更新期間暫停背景代理 watchdog，等待代理生命週期 mutex 釋放後才執行安裝；逾時取消並恢復原程式。
+
+**除錯**
+- 修正舊版 headless 攝影機代理無法被安裝器正常關閉，造成靜默安裝中止、重新啟動後重複要求更新的問題；安裝器僅針對 Deskonect 執行檔關閉占用，成功後恢復代理。
+- 包含 main 已合併的 Google 憑證傳輸備援與錯誤分類修正，避免把無效憑證一律誤報為網路問題；詳見 docs/GOOGLE_LOGIN_NETWORK_REPAIR.md。
+
+**驗證與限制**
+- 合併最新 main 後本機 170 項 Python 測試、Ruff、GUI／CLI／Agent／獨立更新助手 smoke、兩種 Windows Setup 建置通過；三個公開資產 SHA-256 均與本機相符。
+- 公開 latest 已核對為 Build 86；舊更新器以 Build 83／85 檢查可取得 86，以 Build 86 檢查無更新。此為真實更新 API 驗證，不代表已完成安裝。
+- Windows 實際安裝目前仍為 Build 83；修正後端到端升級、另一台電腦登入、真實手機與跨網相機未驗收。未聲稱已修復所有設備問題。
+- Android v2 發行金鑰密碼目前不可用，依使用者明確選擇只發布 Windows；沒有換金鑰或把舊 APK 標為新 Build。
+- 安裝檔來源：`e768e44d1236163fd10e0d190c345efa54a092cb`。
+
+[Windows 更新修正版](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.86)
+
 ### 0.2.0-alpha.85 — 2026-11-19
 
 **狀態：已發布（本次使用者明確同意僅 Windows）；Android 保留 Build 84。**
@@ -23,8 +46,6 @@
 - 原始碼：`ca472bc9c8f72eee8106c80615a6d659b63cbae0`。
 
 [Windows 修正版](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-preview.85)
-
-
 
 ### 0.2.0-alpha.82 — 2026-11-19
 
