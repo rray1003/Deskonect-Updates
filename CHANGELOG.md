@@ -4,6 +4,29 @@
 
 ## 0.3.x 系列
 
+### 0.3.1-alpha.96 — 2026-11-22（已發布）
+
+**狀態：** Windows／Android 已共同建置並公開發布；來源提交 ae359879461f4b6da8d9a5036e32f5924d84ec5e，Build 由全部歷史 Release／Tag 分配為 96。
+
+**新增**
+- Windows 低光攝影機原生曝光協助：在確認硬體驅動支援時嘗試 MSMF／DirectShow 感光增亮，保留原有數位夜視處理及使用者授權流程。
+- 新增唯讀曝光能力診斷工具 `tools/probe_camera_exposure.py`。
+
+**優化**
+- 攝影機讀取、曝光參數調整及停止釋放的序列化，避免連線終止競態。
+- Alpha／Beta 分段版號規則：0 固定、第二段重大階段、第三段相容功能、Build 除錯修訂；全部採十進位，維持 Windows／Android 更新器相容格式。
+
+**除錯**
+- 盡可能在曝光調整無效、過曝或關閉時還原硬體原始曝光設定，防止更改使用者手動設定。
+- 同步 Python、Flutter、Windows 安裝器的版本來源、版本驗證與回歸測試。
+
+**驗證與限制**
+- `BUILD_ALL_LOCAL.bat --worker` 正式流程通過：pip check、Python 語法、Ruff、373 項 pytest（另 2 subtests）、Flutter analyze 與 64 項 Flutter 測試（另 2 項 live 測試未執行）、Kotlin／Manifest／lintRelease、Windows 四 EXE smoke、兩種 Setup、Payload ZIP、原 v2 簽章 APK 及 SHA-256 核對。
+- APK 保留 `app.deskonect.deskonect_android.v2`、原發行憑證、versionCode 96、versionName `0.3.1-alpha.96`；主要與舊 Android 相容 APK 位元相同。共同 `v0.3.1-preview.96` 與舊版 `v0.2.0-android.96` 入口均已公開。
+- 實體手機、MSI Webcam、另一台 Windows 的安裝／App 內升級、Google 真實登入、跨網媒體／控制、PiP、耗電與長時間運作尚未實機驗收。Windows 安裝檔尚無 Authenticode。
+- [Windows／Android Build 96](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.3.1-preview.96) · [舊 Android v2 相容入口](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-android.96)
+
+
 ### 0.3.0-alpha.95 — 2026-11-22（已發布）
 
 **狀態：完整本機雙平台重新建置並正式公開；最新共同 Release 與舊 Android 相容入口均非草稿。來源 eeb6a4bfa2857ce4456748aa8e2974fc61254334，Build 由歷史 Release／tag 自動分配為 95。**
