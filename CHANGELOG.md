@@ -4,6 +4,34 @@
 
 ## 0.3.x 系列
 
+### 0.3.2-alpha.97 — 2026-11-23（已發布）
+
+**狀態：** Windows／Android 已共同建置並公開發布；來源提交 `959e33634523b00027059dc248939a2352ec3eb9`，發布器依全部歷史 Tag／Release 分配 Build 97。
+
+**新增**
+- Windows 攝影機新增可選的完全離線 OpenCV 微光全彩實驗引擎（balanced／bright）；預設仍為原版夜視處理。
+- 新增本機可選的 IAT ONNX 推論介面，模型與 Runtime 不內建、也不自動下載；實際模型推論仍待獨立驗證。
+- Windows 攝影機新增使用者本機明確啟用、每次連線最多兩組的原始／處理後無損 PNG A/B 診斷，永不自動上傳。
+
+**優化**
+- Windows Tk 觀看端移除 20 FPS 的輪詢繪圖上限，只繪製最新影格；新增相機讀取／主機有效 FPS／Android 解碼 FPS 的分段觀察。
+- Android 攝影機遠端收音及按住對講時，嘗試回復一般媒體音量路由，保留 WebRTC、背景接聽、PiP 與原有權限。
+- 微光全彩保留暗部實際紅藍色彩，採取較保守的色度／時域處理與新增回歸案例。
+
+**除錯**
+- 修正 Android／HyperOS 的受限制無障礙設定引導，不繞過 Android 系統授權。
+- 修整新增 Python 模組匯入排序並同步 Python、Flutter、Windows 安裝器、預設 build-info、測試與文件至 0.3.2。
+- 保留實驗演算法／診斷出錯時回退，不影響授權、原觀看與音訊會話。
+
+**驗證與限制**
+- `BUILD_ALL_LOCAL.bat --worker` 正式流程通過：Python 語法、Ruff、pip check、405 項 pytest（另 2 subtests，1 項依賴套件棄用警告）、Flutter analyze 與 67 項 Flutter 測試（另 2 項 live 測試未執行）、Kotlin／Manifest／lintRelease、Windows 四 EXE smoke、線上及離線 Setup、Payload ZIP、原 v2 簽章 APK。發布前指定的 3 個相機診斷測試檔另有 22 項通過。
+- APK 保留 `app.deskonect.deskonect_android.v2`、原發行憑證 SHA-256 `4dbfc50a4219aea08410c6cd0ac9b72b5257782e7b0147fe2687ebec528917e4`、versionCode 97、versionName `0.3.2-alpha.97`；主要與舊 Android 相容 APK 位元相同。共同 `v0.3.2-preview.97` 與舊版 `v0.2.0-android.97` 入口均已公開，主要版為 GitHub latest。
+- 五個公開資產均重新下載並核對 SHA-256，與本機建置清單一致：Windows 線上 Setup `f18f4095020774469f26c7613cb6ba82cc7076bd6db14561b04ada4b14c6006a`；離線更新包 `4d1e445cbf5151ff4296222541249451a9e02068f89211e8ce1c63054a62f91c`；Payload ZIP `d17ceea7a3628a198b6a9a966745ff47c3b266834ce9550814eef92fa2d875da`；主要與相容 APK `02556ac6c3911c7de4728018f409cb2e74ea6e6369539118bedaace6276cce31`。
+- OpenCV 原型於 1152×1536 靜態照片先前曾量測約 0.44–0.51 秒／張，這不是即時串流 FPS；IAT 尚未以真實權重測試，Redmi／POCO 真實音訊路由與 MSI 相機畫質均未驗收。
+- 實體手機、另一台 Windows 的安裝／App 內升級、Google 真實登入、跨網媒體／控制、PiP、耗電與長時間運作尚未實機驗收。Windows 安裝檔尚無 Authenticode。保持零額外費用、既有 Android v2 簽章／Package ID、舊版更新相容 Tag 和全部歷史版本紀錄。
+- [Windows／Android Build 97](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.3.2-preview.97) · [舊 Android v2 相容入口](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-android.97)
+
+
 ### 0.3.1-alpha.96 — 2026-11-22（已發布）
 
 **狀態：** Windows／Android 已共同建置並公開發布；來源提交 ae359879461f4b6da8d9a5036e32f5924d84ec5e，Build 由全部歷史 Release／Tag 分配為 96。
