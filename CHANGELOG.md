@@ -4,6 +4,36 @@
 
 ## 0.3.x 系列
 
+### 0.3.3-alpha.98 — 2026-11-24（已發布）
+
+**狀態：** Windows／Android 已由本機正式流程共同建置並公開發布；實際建置來源 `9f593ee898570a7856cacfff678f6e5b9cd9dd2a`，發布器核對歷史 Tag／Release 後分配 Build 98。
+
+**新增**
+- Android 五款獨立配色（天空、愛心、奶油、薄荷、貴族），各有淺色與深色配色，並加入外觀設定與本機偏好保存；Windows 同步提供五色深淺介面。
+- Android 將觀看頁移至獨立原生 `CameraViewerActivity`／FlutterEngine，使用 Android 系統 PiP 疊在仍可操作的裝置清單上，而非主視窗內嵌視窗。
+- Windows 提供經本機授權的一鍵攝影機原始／處理後影格與曝光、FPS 診斷、結果預覽，資料留在本機。
+- Android 已授權遠端控制加入連續拖曳封包、手勢延續與較低延遲的預覽更新，保留舊協定回退。
+
+**優化**
+- Windows 裝置清單區分電腦與手機裝置，精簡文字與控制介面，維持觀看頁為主視窗之外獨立視窗。
+- Android WebRTC 預設音訊與 Windows 音效裝置處理改進一般媒體音量與 HFP 裝置排除，既有對講／收音權限與連線機制保留。
+- Android 原生 PiP 關閉、旋轉與觀看會話清理採有界等待，避免把裝置清單 Activity 結束；五色主題新增完整獨立亮暗表面色。
+
+**除錯**
+- 修正 Android Flutter 3.35+ `ThemeData.appBarTheme` 參數型別，將 `AppBarTheme` 改成 `AppBarThemeData` 並新增來源回歸檢查；本機主題儲存不可用時不再讓使用者操作產生未處理的非同步錯誤。
+- 修正 Android 原生觀看端部分 WebRTC 音訊路由與關閉時生命週期問題；保留授權要求與背景相機服務的獨立性。
+- 修正 Windows 診斷模組的 logger、Android 連續拖曳封包解析、Flutter 主題棄用 API，以及 Android 8 以下的連續拖曳 API 呼叫邊界；更新 Windows 八頁導覽測試，保留原有 swipe 回退與授權流程。
+
+**驗證與限制**
+- `BUILD_ALL_LOCAL.bat --worker` 正式流程通過 Python 語法、Ruff、pip check、444 項 pytest（另 2 subtests，1 項依賴套件棄用警告）、Flutter analyze、72 項 Flutter 測試（另 2 項 live 測試未執行）、Kotlin／Manifest／lintRelease、Windows 四 EXE Smoke Test、線上及離線 Setup、Payload ZIP、原 v2 簽章 APK 與草稿資產 SHA-256 核對；失敗 0 項。完整日誌為 `local-release-20261124-195608.log`，本機清單為 `dist/build-98-verified.json`。
+- APK 保留 Package ID `app.deskonect.deskonect_android.v2`、原憑證 SHA-256 `4dbfc50a4219aea08410c6cd0ac9b72b5257782e7b0147fe2687ebec528917e4`、versionCode 98、versionName `0.3.3-alpha.98`；主要與相容 APK 位元相同。共同 `v0.3.3-preview.98` 與舊版 `v0.2.0-android.98` 均已公開，主要版為 GitHub latest。
+- 草稿上傳資產與本機清單逐一核對 SHA-256：Windows 線上 Setup `e2a5d3a869f39c195a2cf06a55a93f9756118fb216c10c502881a4419d907bba`；離線更新 Setup `4b1b7aacaaa484a3b7c8924d97acc13a93e452eba86e85e3e472747c01546ae5`；Payload ZIP `67459f1caae76f78180544952cb41a7b1632e1804a7336a0a84e42e128a53f38`；主要與相容 APK `11f44f08fc59784c86e70719bbc5a1e0b98f70d49939b0d5bdabbc551c2ad49a`。
+- Android 系統 PiP、音訊媒體路由、持續拖曳、MSI Webcam 診斷及跨網品質仍需真實 Redmi／POCO／Windows 裝置驗證，不能以 mock 或編譯結果宣稱完整通過。
+- 實體手機、另一台 Windows 的安裝／App 內升級、Google 真實登入、跨網媒體／控制、PiP、耗電與長時間運作尚未實機驗收；Windows 安裝檔尚無 Authenticode。不啟用任何有額外費用的服務，保留舊版更新相容入口與歷史紀錄。
+- [Windows／Android Build 98](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.3.3-preview.98) · [舊 Android v2 相容入口](https://github.com/rray1003/Deskonect-Updates/releases/tag/v0.2.0-android.98)
+
+
+
 ### 0.3.2-alpha.97 — 2026-11-23（已發布）
 
 **狀態：** Windows／Android 已共同建置並公開發布；來源提交 `959e33634523b00027059dc248939a2352ec3eb9`，發布器依全部歷史 Tag／Release 分配 Build 97。
